@@ -6,6 +6,8 @@ import { ConfigRoutes } from './routes/Config.routes';
 import { ConfigService } from './services/Config.service';
 import { EmployeeRoutes } from './routes/Employee.routes';
 import { CashShiftRoutes } from './routes/CashShift.routes';
+import { CategoryRoutes } from './routes/Category.routes';
+
 
 
 dotenv.config();
@@ -32,10 +34,12 @@ class Server {
         const configRoutes = new ConfigRoutes();
         const employeeRoutes = new EmployeeRoutes();
         const cashShiftRoutes  = new CashShiftRoutes()  
+        const categoryRoutes = new CategoryRoutes()
 
         this.app.use('/config',configRoutes.getRouter())
         this.app.use('/employees', employeeRoutes.getRouter());  
         this.app.use('/shifts',cashShiftRoutes.getRouter())
+        this.app.use('/categories', categoryRoutes.getRouter())
 
         this.app.use
         this.app.get('/health', (req: Request, res: Response) => {

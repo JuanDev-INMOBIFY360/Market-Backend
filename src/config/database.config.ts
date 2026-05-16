@@ -4,6 +4,8 @@ import { Config } from "../models/Config.model";
 import { Employee } from "../models/Employee.model";
 import { CashShift } from "../models/CashShift.model";
 import { CashMovement } from "../models/CashMovement.model";
+import { Category } from '../models/Category.model';
+
 Employee
 
 dotenv.config()
@@ -17,5 +19,5 @@ export const appDataSource = new DataSource({
     database: process.env.DB_DATABASE ,
     synchronize: true,
     logging: true,
-    entities: [Config,Employee,CashShift,CashMovement]
+    entities: [Config,Employee,CashShift,CashMovement,Category]
 })
