@@ -8,6 +8,7 @@ import { EmployeeRoutes } from './routes/Employee.routes';
 import { CashShiftRoutes } from './routes/CashShift.routes';
 import { CategoryRoutes } from './routes/Category.routes';
 import { ProductRoutes } from './routes/Product.routes';
+import {SupplierRoutes} from './routes/Supplier.routes'
 
 
 
@@ -37,12 +38,15 @@ class Server {
         const cashShiftRoutes  = new CashShiftRoutes()  
         const categoryRoutes = new CategoryRoutes()
         const productRoutes = new ProductRoutes();
+        const supplierRoutes = new SupplierRoutes()
 
         this.app.use('/config',configRoutes.getRouter())
         this.app.use('/employees', employeeRoutes.getRouter());  
         this.app.use('/shifts',cashShiftRoutes.getRouter())
         this.app.use('/categories', categoryRoutes.getRouter())
         this.app.use('/products', productRoutes.getRouter());
+        this.app.use('/suppliers', supplierRoutes.getRouter());
+        
 
         this.app.use
         this.app.get('/health', (req: Request, res: Response) => {

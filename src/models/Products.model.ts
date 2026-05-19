@@ -14,7 +14,7 @@ import { Category } from "./Category.model";
     @Column({type: 'varchar', length:100})
     name!:string
 
-    @Column({type:'text', length:250, nullable: true})
+    @Column({type:'text',  nullable: true})
     description!:string
 
     @Column({type: 'uuid', name: 'category_id', nullable: true})
