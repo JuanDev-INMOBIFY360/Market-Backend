@@ -4,6 +4,7 @@ import { ProductsRepository } from '../repositories/Products.repository';
 import { SupplierRepository } from '../repositories/Supplier.repository';
 import { Purchase, PurchaseStatus } from '../models/Purchase.model';
 import { PurchaseItem } from '../models/PurchaseItem.model';
+import { InventoryService } from './Inventory.service';
 
 interface PurchaseItemInput {
     productId: string;
@@ -17,12 +18,15 @@ export class PurchaseService {
     private purchaseItemRepository: PurchaseItemRepository;
     private productsRepository: ProductsRepository;
     private supplierRepository: SupplierRepository;
+    private inventoryService: InventoryService;
+
 
     constructor() {
         this.purchaseRepository = PurchaseRepository.getInstance();
         this.purchaseItemRepository = PurchaseItemRepository.getInstance();
         this.productsRepository = ProductsRepository.getInstance();
         this.supplierRepository = SupplierRepository.getInstance();
+        this.inventoryService = new InventoryService();
     }
 
     async createPurchase(supplierId: string,
@@ -115,6 +119,15 @@ export class PurchaseService {
             if (!product) continue;
             const newStock = product.stock + item.quantity;
             await this.productsRepository.adjustStock(item.productId, newStock);
+
+            await this.inventoryService.registerMovement(
+                item.productId,
+                'purchase',
+                item.quantity,
+                purchase.employeeId,
+                purchase.id,
+                `Compra #${purchase.invoiceNumber}`
+            );
         }
 
         purchase.status = 'completed';
@@ -136,6 +149,14 @@ export class PurchaseService {
 
                 }
                 await this.productsRepository.adjustStock(item.productId, newStock);
+                await this.inventoryService.registerMovement(
+                    item.productId,
+                    'return_purchase',
+                    item.quantity,
+                    purchase.employeeId,
+                    purchase.id,
+                    `Cancelación compra #${purchase.invoiceNumber}`
+                );
             }
         }
         purchase.status = 'cancelled';

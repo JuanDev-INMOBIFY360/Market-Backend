@@ -1,14 +1,17 @@
 // src/services/Employee.service.ts
 import { EmployeeRepository } from '../repositories/Employee.repository';
 import { Employee, EmployeeRole } from '../models/Employee.model';
+import { CashShiftRepository } from '../repositories/CashShift.repository';
 import { JWTUtil } from '../utils/jwt.util';
 import bcrypt from 'bcrypt';
 
 export class EmployeeService {
     private employeeRepository: EmployeeRepository;
+    private cashShiftRepository: CashShiftRepository;
 
     constructor() {
         this.employeeRepository = EmployeeRepository.getInstance();
+        this.cashShiftRepository = CashShiftRepository.getInstance();
     }
 
     async createEmployee(
@@ -159,10 +162,13 @@ export class EmployeeService {
             throw new Error('Contraseña incorrecta');
         }
 
+        const activeShift = await this.cashShiftRepository.findCurrentShiftByEmployee(employee.id);
+        const shiftId = activeShift?.id || null
         const token = JWTUtil.generateToken({
             id: employee.id,
             code: employee.code,
-            role: employee.role
+            role: employee.role,
+            shiftId: shiftId  
         })
 
         return { employee, token }

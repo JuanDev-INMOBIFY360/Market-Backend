@@ -10,7 +10,13 @@ import { CategoryRoutes } from './routes/Category.routes';
 import { ProductRoutes } from './routes/Product.routes';
 import { SupplierRoutes } from './routes/Supplier.routes'
 import { PurchaseRoutes } from './routes/Purchase.routes';
-
+import { SaleRoutes } from './routes/Sale.routes';
+import { CustomerRoutes } from './routes/Customer.routes';
+import { PromotionRoutes } from './routes/Promotion.routes';
+import { InventoryRoutes } from './routes/Inventory.routes';
+import { InvoiceRoutes } from './routes/Invoice.routes';
+import { ReportRoutes } from './routes/Report.routes';
+import { DashboardRoutes } from './routes/Dashboard.routes';
 
 
 dotenv.config();
@@ -41,6 +47,14 @@ class Server {
         const productRoutes = new ProductRoutes();
         const supplierRoutes = new SupplierRoutes();
         const purchaseRoutes = new PurchaseRoutes();
+        const saleRoutes = new SaleRoutes();
+        const customerRoutes = new CustomerRoutes();
+        const promotionRoutes = new PromotionRoutes();
+        const inventoryRoutes = new InventoryRoutes();
+        const invoiceRoutes = new InvoiceRoutes();
+        const reportRoutes = new ReportRoutes();
+        const dashboardRoutes = new DashboardRoutes();    
+
 
         this.app.use('/config', configRoutes.getRouter())
         this.app.use('/employees', employeeRoutes.getRouter());
@@ -49,6 +63,14 @@ class Server {
         this.app.use('/products', productRoutes.getRouter());
         this.app.use('/suppliers', supplierRoutes.getRouter());
         this.app.use('/purchases', purchaseRoutes.getRouter());
+        this.app.use('/sales', saleRoutes.getRouter());
+        this.app.use('/customers', customerRoutes.getRouter());
+        this.app.use('/promotions', promotionRoutes.getRouter());
+        this.app.use('/inventory', inventoryRoutes.getRouter());
+        this.app.use('/invoice', invoiceRoutes.getRouter());
+        this.app.use('/reports', reportRoutes.getRouter());
+        this.app.use('/dashboard', dashboardRoutes.getRouter());
+
 
 
         this.app.use

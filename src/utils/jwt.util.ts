@@ -6,7 +6,7 @@ export class JWTUtil{
     private static secret: string = process.env.JWT_SECRET!;
     private static expiresIn: string = process.env.JWT_EXPIRES_IN || '7d';
 
-    static generateToken(payload: {id:string, code:string, role: string}): string{
+    static generateToken(payload: {id:string, code:string, role: string, shiftId: string | null}): string{
         return jwt.sign(payload, this.secret, {expiresIn: this.expiresIn} as any)
     }
 
