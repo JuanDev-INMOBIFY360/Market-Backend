@@ -12,6 +12,8 @@ import { SupplierRoutes } from './routes/Supplier.routes'
 import { PurchaseRoutes } from './routes/Purchase.routes';
 import { SaleRoutes } from './routes/Sale.routes';
 import { CustomerRoutes } from './routes/Customer.routes';
+import { PromotionRoutes } from './routes/Promotion.routes';
+import { InventoryRoutes } from './routes/Inventory.routes';
 
 
 
@@ -46,7 +48,11 @@ class Server {
         const supplierRoutes = new SupplierRoutes();
         const purchaseRoutes = new PurchaseRoutes();
         const saleRoutes = new SaleRoutes();
-        const customerRoutes  = new CustomerRoutes();
+        const customerRoutes = new CustomerRoutes();
+        const promotionRoutes = new PromotionRoutes();
+        const inventoryRoutes = new InventoryRoutes();
+
+
 
         this.app.use('/config', configRoutes.getRouter())
         this.app.use('/employees', employeeRoutes.getRouter());
@@ -57,6 +63,10 @@ class Server {
         this.app.use('/purchases', purchaseRoutes.getRouter());
         this.app.use('/sales', saleRoutes.getRouter());
         this.app.use('/customers', customerRoutes.getRouter());
+        this.app.use('/promotions', promotionRoutes.getRouter());
+        this.app.use('/inventory', inventoryRoutes.getRouter());
+
+
 
 
         this.app.use

@@ -9,12 +9,15 @@ import { SaleItem } from '../models/SaleItem.model';
 import { CashMovement } from '../models/CashMovement.model';
 import { appDataSource } from '../config/database.config';
 import { Customer } from '../models/Customer.model';
+import { InventoryService } from './Inventory.service';
 
 export class SaleService {
     private saleRepository: SaleRepository;
     private productRepository: ProductsRepository;
     private cashShiftRepository: CashShiftRepository;
     private cashMovementRepository: CashMovementRepository;
+    private inventoryService: InventoryService;
+
     private carts: Map<string, Cart> = new Map();
 
     constructor() {
@@ -22,6 +25,7 @@ export class SaleService {
         this.productRepository = ProductsRepository.getInstance();
         this.cashShiftRepository = CashShiftRepository.getInstance();
         this.cashMovementRepository = CashMovementRepository.getInstance();
+        this.inventoryService = new InventoryService();
     }
 
     private getCart(shiftId: string): Cart {
@@ -143,8 +147,8 @@ export class SaleService {
         sale.cashChange = cashChange;
         sale.status = 'completed';
 
-        // Crear items
-        sale.items = [];
+        // Crear items (pero sin guardar aún)
+        const saleItems: SaleItem[] = [];
         for (const item of items) {
             const product = await this.productRepository.findById(item.productId);
             const taxAmount = this.calculateItemTax(item.subtotal, product!.taxCode);
@@ -157,30 +161,47 @@ export class SaleService {
             saleItem.subtotal = item.subtotal;
             saleItem.taxCode = product!.taxCode;
             saleItem.taxAmount = taxAmount;
-            sale.items.push(saleItem);
+            saleItems.push(saleItem);
 
             // Disminuir stock
             await this.productRepository.adjustStock(item.productId, product!.stock - item.quantity);
         }
 
-        // Guardar venta
+        sale.items = saleItems;
+
+        // Guardar venta (esto genera el ID)
         const savedSale = await this.saleRepository.save(sale);
+
+        // 🔥 REGISTRAR MOVIMIENTOS DE INVENTARIO (solo después de tener el ID)
+        for (let i = 0; i < items.length; i++) {
+            const item = items[i];
+            await this.inventoryService.registerMovement(
+                item.productId,
+                'sale',
+                item.quantity,
+                employeeId,
+                savedSale.id,  // ← Ahora sí existe
+                `Venta #${savedSale.saleNumber}`
+            );
+        }
+
+        // Puntos del cliente
         if (customerId && customerId !== '') {
             try {
-                const pointsEarned = Math.floor(total * 0.01)
+                const pointsEarned = Math.floor(total * 0.01);
                 if (pointsEarned > 0) {
-                    savedSale.pointsEarned = pointsEarned
-                    await this.saleRepository.update(savedSale.id, { pointsEarned })
+                    savedSale.pointsEarned = pointsEarned;
+                    await this.saleRepository.update(savedSale.id, { pointsEarned });
 
-                    const customer = await appDataSource.getRepository(Customer).findOneBy({ id: customerId })
+                    const customer = await appDataSource.getRepository(Customer).findOneBy({ id: customerId });
                     if (customer) {
-                        customer.points += pointsEarned
-                        customer.totalSpent = (customer.totalSpent || 0) + total
-                        await appDataSource.getRepository(Customer).save(customer)
+                        customer.points += pointsEarned;
+                        customer.totalSpent = (customer.totalSpent || 0) + total;
+                        await appDataSource.getRepository(Customer).save(customer);
                     }
                 }
             } catch (error) {
-
+                console.error('Error al sumar puntos:', error);
             }
         }
 
@@ -247,6 +268,14 @@ export class SaleService {
             const product = await this.productRepository.findById(item.productId);
             if (product) {
                 await this.productRepository.adjustStock(item.productId, product.stock + item.quantity);
+                await this.inventoryService.registerMovement(
+                    item.productId,
+                    'return_sale',
+                    item.quantity,
+                    cancelledBy,
+                    sale.id,
+                    `Cancelación venta #${sale.saleNumber} - Motivo: ${reason}`
+                );
             }
         }
 
