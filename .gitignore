@@ -1,11 +1,28 @@
-# Dependencias
+# =========================
+# DEPENDENCIAS
+# =========================
 node_modules/
 
-# Build
+# =========================
+# BUILDS / COMPILADOS
+# =========================
 dist/
 build/
+out/
 
-# Logs
+# TypeScript
+*.tsbuildinfo
+
+# =========================
+# VARIABLES DE ENTORNO
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# LOGS
+# =========================
 logs/
 *.log
 npm-debug.log*
@@ -13,32 +30,101 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Variables de entorno
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# =========================
+# TESTING / COVERAGE
+# =========================
+coverage/
+.nyc_output/
 
-# Archivos del sistema
+# Jest
+jest-results/
+junit.xml
+
+# =========================
+# TEMPORALES
+# =========================
+tmp/
+temp/
+.tmp/
+
+# =========================
+# UPLOADS / ARCHIVOS
+# =========================
+uploads/
+invoices/
+exports/
+reports/
+
+# PDFs generados
+*.pdf
+
+# Excel exportados
+*.xlsx
+*.csv
+
+# =========================
+# CACHE
+# =========================
+.cache/
+.parcel-cache/
+
+# =========================
+# IDEs / EDITORES
+# =========================
+
+# VSCode
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# JetBrains
+.idea/
+
+# Vim
+*.swp
+*.swo
+
+# =========================
+# SISTEMA OPERATIVO
+# =========================
 .DS_Store
 Thumbs.db
 
-# VSCode
-.vscode/
+# =========================
+# DOCKER
+# =========================
+docker-data/
+*.pid
 
-# IntelliJ / WebStorm
-.idea/
+# =========================
+# ORM
+# =========================
 
-# Coverage
-coverage/
+# TypeORM
+typeorm.log
 
-# TypeScript
-*.tsbuildinfo
+# Prisma
+prisma/dev.db
+prisma/dev.db-journal
 
-# Archivos temporales
-tmp/
-temp/
+# =========================
+# PM2
+# =========================
+.pids/
+*.pid
+*.seed
+*.pid.lock
 
-# Uploads opcionales
-uploads/
+# =========================
+# SEGURIDAD
+# =========================
+*.pem
+*.key
+*.crt
+
+# =========================
+# ARCHIVOS GENERADOS
+# =========================
+generated/

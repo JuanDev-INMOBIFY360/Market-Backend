@@ -13,7 +13,7 @@ export class CustomerRepository {
     }
 
     public static getInstance(): CustomerRepository {
-        if (!CustomerRepository) {
+        if (!CustomerRepository.instance) {
             CustomerRepository.instance = new CustomerRepository();
         }
         return CustomerRepository.instance

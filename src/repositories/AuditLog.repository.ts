@@ -11,7 +11,7 @@ export class AuditLogRepository {
     }
 
     public static getInstance(): AuditLogRepository {
-        if (!AuditLogRepository) {
+        if (!AuditLogRepository.instance) {
             AuditLogRepository.instance = new AuditLogRepository();
         }
         return AuditLogRepository.instance

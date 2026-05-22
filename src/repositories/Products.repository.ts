@@ -12,7 +12,7 @@ export class ProductsRepository {
     }
 
     public static getInstance(): ProductsRepository {
-        if (!ProductsRepository) {
+        if (!ProductsRepository.instance) {
             ProductsRepository.instance = new ProductsRepository()
         }
         return ProductsRepository.instance
@@ -21,7 +21,7 @@ export class ProductsRepository {
     async findAll(page: number = 1, limit: number = 50) : Promise<{products: Products[]; total: number}>{
         const  [products, total] = await this.repo.findAndCount({
             where: {isActive: true},
-            relations: ['categpry'],
+            relations: ['category'],
             order: { createdAt: 'DESC' },
             skip: (page - 1) * limit,
              take: limit

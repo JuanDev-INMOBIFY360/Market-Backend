@@ -29,55 +29,57 @@ export class PurchaseService {
         this.inventoryService = new InventoryService();
     }
 
-    async createPurchase(supplierId: string,
-        invoiceNumber: string,
-        employeeId: string,
-        items: PurchaseItemInput[],
-        notes?: string): Promise<Purchase> {
-        const supplier = await this.supplierRepository.findById(supplierId)
-        if (!supplier) {
-            throw new Error("Proveedor no encontrado");
+    async createPurchase(
+    supplierId: string,
+    invoiceNumber: string,
+    employeeId: string,
+    items: PurchaseItemInput[],
+    notes?: string
+): Promise<Purchase> {
+    const supplier = await this.supplierRepository.findById(supplierId);
+    if (!supplier) throw new Error("Proveedor no encontrado");
 
-        }
-        const existingPurchases = await this.purchaseRepository.findAll()
-        if (existingPurchases.some(p => p.invoiceNumber === invoiceNumber)) {
-            throw new Error(`Ya existe una compra con la factura ${invoiceNumber}`);
-
-        }
-
-        let subtotal = 0
-        const purchaseItems: PurchaseItem[] = []
-
-        for (const item of items) {
-            const product = await this.productsRepository.findById(item.productId)
-            if (!product) {
-                throw new Error(`Producto ${item.productId} no encontrado`);
-            }
-            const purchaseItem = new PurchaseItem();
-            purchaseItem.productId = item.productId;
-            purchaseItem.quantity = item.quantity;
-            purchaseItem.unitPrice = item.unitPrice;
-            purchaseItem.subtotal = item.quantity * item.unitPrice;
-            subtotal += purchaseItem.subtotal;
-            purchaseItems.push(purchaseItem);
-        }
-        const tax = subtotal * 0.19; // IVA 19%
-        const total = subtotal + tax;
-
-        const purchase = new Purchase();
-        purchase.supplierId = supplierId;
-        purchase.invoiceNumber = invoiceNumber;
-        purchase.employeeId = employeeId;
-        purchase.subtotal = subtotal;
-        purchase.tax = tax;
-        purchase.total = total;
-        purchase.status = 'pending';
-        purchase.notes = notes || '';
-        purchase.items = purchaseItems;
-
-        return await this.purchaseRepository.save(purchase);
-
+    const existingPurchases = await this.purchaseRepository.findAll();
+    if (existingPurchases.some(p => p.invoiceNumber === invoiceNumber)) {
+        throw new Error(`Ya existe una compra con la factura ${invoiceNumber}`);
     }
+
+    let subtotal = 0;
+    for (const item of items) {
+        const product = await this.productsRepository.findById(item.productId);
+        if (!product) throw new Error(`Producto ${item.productId} no encontrado`);
+        subtotal += item.quantity * item.unitPrice;
+    }
+
+    const tax = subtotal * 0.19;
+    const total = subtotal + tax;
+
+    const purchase = new Purchase();
+    purchase.supplierId = supplierId;
+    purchase.invoiceNumber = invoiceNumber;
+    purchase.employeeId = employeeId;
+    purchase.subtotal = subtotal;
+    purchase.tax = tax;
+    purchase.total = total;
+    purchase.status = 'pending';
+    purchase.notes = notes || '';
+    const savedPurchase = await this.purchaseRepository.save(purchase);
+
+    for (const item of items) {
+        const purchaseItem = new PurchaseItem();
+        purchaseItem.purchaseId = savedPurchase.id; 
+        purchaseItem.productId = item.productId;
+        purchaseItem.quantity = item.quantity;
+        purchaseItem.unitPrice = item.unitPrice;
+        purchaseItem.subtotal = item.quantity * item.unitPrice;
+        await this.purchaseItemRepository.save(purchaseItem);
+    }
+
+    const completedPurchase = await this.purchaseRepository.findById(savedPurchase.id);
+    console.log('ITEMS EN DB:', JSON.stringify(completedPurchase?.items));
+    if (!completedPurchase) throw new Error('Error al guardar la compra');
+    return completedPurchase;
+}
     async getAllPurcharses(): Promise<Purchase[]> {
         return await this.purchaseRepository.findAll()
     }
@@ -141,7 +143,10 @@ export class PurchaseService {
         }
         if (purchase.status === 'completed') {
             for (const item of purchase.items) {
-                const product = await this.productsRepository.findById(id)
+                const product = await this.productsRepository.findById(item.id)
+
+
+
                 if (!product) continue
                 const newStock = product.stock - item.quantity
                 if (newStock < 0) {

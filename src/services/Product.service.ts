@@ -1,4 +1,3 @@
-// src/services/Product.service.ts
 import { ProductsRepository } from '../repositories/Products.repository';
 import { CategoryRepository } from '../repositories/Category.repository';
 import { Products } from '../models/Products.model';

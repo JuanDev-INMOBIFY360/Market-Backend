@@ -14,7 +14,7 @@ export class PurchaseRepository  {
     }
 
     public static getInstance() : PurchaseRepository{
-        if (!PurchaseRepository) {
+        if (!PurchaseRepository.instance) {
             PurchaseRepository.instance = new PurchaseRepository()
         }
         return PurchaseRepository.instance;
@@ -22,17 +22,17 @@ export class PurchaseRepository  {
 
     async findAll(): Promise<Purchase[]> {
         return await this.repo.find({
-            relations: ['supplier', 'employee', 'items', 'items.product'],
+            relations: ['supplier', 'employee', 'items', 'items.products'],
             order: { purchaseDate: 'DESC' }
         });
     }
 
-    async findById (id: string) : Promise <Purchase | null>{
-        return await this.repo.findOne({
-            where: {id},
-            relations: ['supplier', 'employee', 'items', 'items.product']
-        })
-    }
+    async findById(id: string): Promise<Purchase | null> {
+    return await this.repo.findOne({
+        where: { id },
+        relations: ['supplier', 'employee', 'items', 'items.products']  
+    });
+}
 
     async save (purchase: Purchase) : Promise <Purchase>{
         return await this.repo.save(purchase)

@@ -11,7 +11,7 @@ export class PointsHistoryRepository {
     }
 
     public static getInstance(): PointsHistoryRepository {
-        if (!PointsHistoryRepository) {
+        if (!PointsHistoryRepository.instance) {
             PointsHistoryRepository.instance = new PointsHistoryRepository
         }
         return PointsHistoryRepository.instance

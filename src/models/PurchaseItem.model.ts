@@ -1,9 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { Purchase } from './Purchase.model';
 import { Products } from './Products.model';
 
 @Entity({ name: 'purchase_items' })
-
 export class PurchaseItem {
 
     @PrimaryGeneratedColumn('uuid')
@@ -12,13 +11,15 @@ export class PurchaseItem {
     @Column({ type: 'uuid', name: 'purchase_id' })
     purchaseId!: string
 
-    @ManyToOne(() => Purchase)
+    @ManyToOne(() => Purchase, (purchase) => purchase.items)
+    @JoinColumn({ name: 'purchase_id' })  // ✅ esto
     purchase!: Purchase
 
     @Column({ type: 'uuid', name: 'product_id' })
     productId!: string;
 
     @ManyToOne(() => Products)
+    @JoinColumn({ name: 'product_id' })  // ✅ y esto
     products!: Products
 
     @Column({ type: 'int' })
@@ -41,5 +42,4 @@ export class PurchaseItem {
             subtotal: this.subtotal
         }
     }
-
 }

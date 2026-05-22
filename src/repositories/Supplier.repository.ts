@@ -12,7 +12,7 @@ export class SupplierRepository  {
     }
 
     public static getInstance() : SupplierRepository {
-        if (!SupplierRepository) {
+        if (!SupplierRepository.instace) {
             SupplierRepository.instace = new SupplierRepository
         }
         return SupplierRepository.instace

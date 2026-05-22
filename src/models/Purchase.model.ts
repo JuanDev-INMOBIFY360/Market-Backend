@@ -46,8 +46,8 @@ export class Purchase {
     @Column({ type: 'text', nullable: true })
     notes!: string;
 
-    @OneToMany(() => PurchaseItem, (item) => item.purchase, {cascade: true})
-    items!: PurchaseItem[];
+    @OneToMany(() => PurchaseItem, (item) => item.purchase, { cascade: false })
+    items!: PurchaseItem[]; 
 
     @CreateDateColumn({ name: 'created_at' })
     createdAt!: Date;
