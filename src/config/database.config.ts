@@ -15,8 +15,9 @@ import { Customer } from "../models/Customer.model";
 import{PointsHistory} from "../models/PointsHistory.model";
 import { Promotion } from "../models/Promotion.model";
 import{InventoryMovement} from "../models/InventoryMovement.model"
+import {AuditLog} from "../models/AuditLog.model"
 
-Employee
+
 
 dotenv.config()
 
@@ -29,5 +30,5 @@ export const appDataSource = new DataSource({
     database: process.env.DB_DATABASE ,
     synchronize: true,
     logging: true,
-    entities: [Config, Employee, CashShift, CashMovement, Category, Products, Supplier, Purchase, PurchaseItem, Sale, SaleItem,Customer,PointsHistory,Promotion,InventoryMovement]
+    entities: [Config, Employee, CashShift, CashMovement, Category, Products, Supplier, Purchase, PurchaseItem, Sale, SaleItem,Customer,PointsHistory,Promotion,InventoryMovement,AuditLog]
 })
