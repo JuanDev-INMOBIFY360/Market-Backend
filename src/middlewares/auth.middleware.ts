@@ -6,6 +6,7 @@ export interface AuthRequest extends Request {
         id: string;
         code: string;
         role: string;
+        shiftId: string | null
     };
 }
 

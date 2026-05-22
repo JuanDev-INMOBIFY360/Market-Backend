@@ -9,6 +9,10 @@ import { Products } from "../models/Products.model";
 import { Supplier } from "../models/Supplier.model";
 import { Purchase } from "../models/Purchase.model";
 import { PurchaseItem } from "../models/PurchaseItem.model";
+import { Sale } from "../models/Sale.model";
+import { SaleItem } from "../models/SaleItem.model";
+import { Customer } from "../models/Customer.model";
+import{PointsHistory} from "../models/PointsHistory.model";
 
 Employee
 
@@ -23,5 +27,5 @@ export const appDataSource = new DataSource({
     database: process.env.DB_DATABASE ,
     synchronize: true,
     logging: true,
-    entities: [Config, Employee, CashShift, CashMovement, Category, Products, Supplier,Purchase, PurchaseItem],
+    entities: [Config, Employee, CashShift, CashMovement, Category, Products, Supplier, Purchase, PurchaseItem, Sale, SaleItem,Customer,PointsHistory]
 })
