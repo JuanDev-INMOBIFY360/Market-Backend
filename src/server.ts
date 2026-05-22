@@ -17,6 +17,8 @@ import { InventoryRoutes } from './routes/Inventory.routes';
 import { InvoiceRoutes } from './routes/Invoice.routes';
 import { ReportRoutes } from './routes/Report.routes';
 import { DashboardRoutes } from './routes/Dashboard.routes';
+import { AuditLogRoutes } from './routes/AuditLog.routes';
+import { BackupRoutes } from './routes/Backup.routes';
 
 
 dotenv.config();
@@ -54,7 +56,8 @@ class Server {
         const invoiceRoutes = new InvoiceRoutes();
         const reportRoutes = new ReportRoutes();
         const dashboardRoutes = new DashboardRoutes();    
-
+        const auditLogRoutes = new AuditLogRoutes();
+        const backupRoutes = new BackupRoutes();
 
         this.app.use('/config', configRoutes.getRouter())
         this.app.use('/employees', employeeRoutes.getRouter());
@@ -70,6 +73,8 @@ class Server {
         this.app.use('/invoice', invoiceRoutes.getRouter());
         this.app.use('/reports', reportRoutes.getRouter());
         this.app.use('/dashboard', dashboardRoutes.getRouter());
+        this.app.use('/audit', auditLogRoutes.getRouter());
+        this.app.use('/backup', backupRoutes.getRouter());
 
 
 
