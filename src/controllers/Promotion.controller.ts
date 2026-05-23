@@ -16,6 +16,7 @@ export class PromotionController {
                 productId, categoryId, value, minPurchase,
                 buyQuantity, getQuantity, weekdays
             } = req.body;
+            console.log('productId recibido:', productId); 
 
             if (!name || !type || !startDate || !endDate) {
                 res.status(400).json({ error: 'Faltan campos requeridos' });

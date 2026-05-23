@@ -28,7 +28,7 @@ export class Sale {
     employee!: Employee;
 
     @Column({ type: 'uuid', name: 'customer_id', nullable: true })
-    customerId!: string;
+    customerId!: string | null;
 
     @ManyToOne(() => Customer)
     customer!: Customer;

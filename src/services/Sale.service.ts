@@ -1,4 +1,3 @@
-// src/services/Sale.service.ts
 import { SaleRepository } from '../repositories/Sale.repository';
 import { ProductsRepository } from '../repositories/Products.repository';
 import { CashShiftRepository } from '../repositories/CashShift.repository';
@@ -10,6 +9,7 @@ import { CashMovement } from '../models/CashMovement.model';
 import { appDataSource } from '../config/database.config';
 import { Customer } from '../models/Customer.model';
 import { InventoryService } from './Inventory.service';
+import { PromotionService } from './Promotion.service';
 
 export class SaleService {
     private saleRepository: SaleRepository;
@@ -17,7 +17,7 @@ export class SaleService {
     private cashShiftRepository: CashShiftRepository;
     private cashMovementRepository: CashMovementRepository;
     private inventoryService: InventoryService;
-
+    private promotionService: PromotionService;
     private carts: Map<string, Cart> = new Map();
 
     constructor() {
@@ -26,6 +26,7 @@ export class SaleService {
         this.cashShiftRepository = CashShiftRepository.getInstance();
         this.cashMovementRepository = CashMovementRepository.getInstance();
         this.inventoryService = new InventoryService();
+        this.promotionService = new PromotionService();
     }
 
     private getCart(shiftId: string): Cart {
@@ -90,6 +91,39 @@ export class SaleService {
         cart.clear();
     }
 
+    private calculateItemTax(subtotal: number, taxCode: string): number {
+        switch (taxCode) {
+            case 'A':
+                return subtotal * 0.19; // 19% IVA
+            case 'B':
+                return subtotal * 0.05; // 5% IVA
+            case 'D':
+                return subtotal * 0.04; // 4% consumo
+            default:
+                return 0; // C = exento
+        }
+    }
+
+    private calculateTaxWithDiscount(items: CartItem[], subtotalWithDiscount: number): number {
+        const subtotalOriginal = items.reduce((sum, item) => sum + item.subtotal, 0);
+        
+        if (subtotalOriginal === 0) return 0;
+        
+        let totalTax = 0;
+        
+        for (const item of items) {
+            // Proporción del descuento aplicado a este item
+            const itemProportion = item.subtotal / subtotalOriginal;
+            const itemDiscountedSubtotal = item.subtotal - (itemProportion * (subtotalOriginal - subtotalWithDiscount));
+            
+            // Calcular impuesto sobre el subtotal con descuento
+            const taxAmount = this.calculateItemTax(itemDiscountedSubtotal, item.taxCode);
+            totalTax += taxAmount;
+        }
+        
+        return totalTax;
+    }
+
     async createSale(
         shiftId: string,
         employeeId: string,
@@ -115,8 +149,10 @@ export class SaleService {
         }
 
         const subtotal = cart.getSubtotal();
-        const tax = this.calculateTax(items);
-        const total = subtotal + tax;
+        const { discountAmount } = await this.promotionService.calculateDiscountForCart(items, subtotal);
+        const subtotalWithDiscount = subtotal - discountAmount;
+        const tax = this.calculateTaxWithDiscount(items, subtotalWithDiscount);
+        const total = subtotalWithDiscount + tax;
 
         let cashChange = 0;
         if (paymentMethod === 'cash') {
@@ -132,12 +168,12 @@ export class SaleService {
         sale.saleNumber = saleNumber;
         sale.cashShiftId = shiftId;
         sale.employeeId = employeeId;
-        sale.customerId = customerId || '';
+        sale.customerId = customerId ?? null;
         sale.customerName = customerName || 'Consumidor Final';
         sale.customerDocument = customerDocument || '';
         sale.subtotal = subtotal;
-        sale.discount = 0;
-        sale.subtotalWithDiscount = subtotal;
+        sale.discount = discountAmount;
+        sale.subtotalWithDiscount = subtotalWithDiscount;
         sale.tax = tax;
         sale.total = total;
         sale.pointsEarned = 0;
@@ -147,18 +183,23 @@ export class SaleService {
         sale.cashChange = cashChange;
         sale.status = 'completed';
 
-        // Crear items (pero sin guardar aún)
+        // Crear items
         const saleItems: SaleItem[] = [];
         for (const item of items) {
             const product = await this.productRepository.findById(item.productId);
-            const taxAmount = this.calculateItemTax(item.subtotal, product!.taxCode);
+            
+            // Calcular la proporción del descuento para este item
+            const itemProportion = item.subtotal / subtotal;
+            const itemDiscount = discountAmount * itemProportion;
+            const itemSubtotalWithDiscount = item.subtotal - itemDiscount;
+            const taxAmount = this.calculateItemTax(itemSubtotalWithDiscount, product!.taxCode);
 
             const saleItem = new SaleItem();
             saleItem.productId = item.productId;
             saleItem.quantity = item.quantity;
             saleItem.unitPrice = item.unitPrice;
-            saleItem.discount = 0;
-            saleItem.subtotal = item.subtotal;
+            saleItem.discount = itemDiscount;
+            saleItem.subtotal = itemSubtotalWithDiscount;
             saleItem.taxCode = product!.taxCode;
             saleItem.taxAmount = taxAmount;
             saleItems.push(saleItem);
@@ -169,10 +210,10 @@ export class SaleService {
 
         sale.items = saleItems;
 
-        // Guardar venta (esto genera el ID)
+        // Guardar venta
         const savedSale = await this.saleRepository.save(sale);
 
-        // 🔥 REGISTRAR MOVIMIENTOS DE INVENTARIO (solo después de tener el ID)
+        // Registrar movimientos de inventario
         for (let i = 0; i < items.length; i++) {
             const item = items[i];
             await this.inventoryService.registerMovement(
@@ -180,7 +221,7 @@ export class SaleService {
                 'sale',
                 item.quantity,
                 employeeId,
-                savedSale.id,  // ← Ahora sí existe
+                savedSale.id,
                 `Venta #${savedSale.saleNumber}`
             );
         }
@@ -222,27 +263,6 @@ export class SaleService {
         cart.clear();
 
         return savedSale;
-    }
-
-    private calculateTax(items: CartItem[]): number {
-        let tax = 0;
-        for (const item of items) {
-            tax += this.calculateItemTax(item.subtotal, item.taxCode);
-        }
-        return tax;
-    }
-
-    private calculateItemTax(subtotal: number, taxCode: string): number {
-        switch (taxCode) {
-            case 'A':
-                return subtotal * 0.19; // 19% IVA
-            case 'B':
-                return subtotal * 0.05; // 5% IVA
-            case 'D':
-                return subtotal * 0.04; // 4% consumo
-            default:
-                return 0; // C = exento
-        }
     }
 
     async getAllSales(): Promise<Sale[]> {

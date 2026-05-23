@@ -32,7 +32,7 @@ export class CategoryService {
             }
         }
 
-        // Verificar nombre único en el mismo nivel
+        
         const existing = await this.categoryRepository.findByName(name, parentId);
         if (existing) {
             throw new Error('Ya existe una categoría con este nombre en este nivel');

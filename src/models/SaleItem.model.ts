@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne,JoinColumn } from 'typeorm';
 import { Sale } from './Sale.model';
 import { Products } from './Products.model';
 
@@ -11,6 +11,7 @@ export class SaleItem {
     saleId!: string;
 
     @ManyToOne(() => Sale, (sale) => sale.items)
+    @JoinColumn({ name: 'sale_id' })
     sale!: Sale;
 
     @Column({ type: 'uuid', name: 'product_id' })

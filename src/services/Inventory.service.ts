@@ -46,7 +46,7 @@ export class InventoryService {
         movement.quantity = quantity;
         movement.stockBefore = stockBefore;
         movement.stockAfter = stockAfter;
-        movement.referenceId = referenceId || '';
+        movement.referenceId = referenceId ?? null;
         movement.reason = reason || '';
         movement.employeeId = employeeId;
 

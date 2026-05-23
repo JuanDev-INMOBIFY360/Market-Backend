@@ -1,4 +1,4 @@
-import { Entity,PrimaryGeneratedColumn,Column,UpdateDateColumn,CreateDateColumn, ManyToOne } from "typeorm";
+import { Entity,PrimaryGeneratedColumn,Column,UpdateDateColumn,CreateDateColumn, ManyToOne,JoinColumn } from "typeorm";
 import { Employee } from "./Employee.model";
 
 
@@ -15,6 +15,7 @@ export class CashShift  {
     employeeId!: string;
 
     @ManyToOne(() => Employee)
+    @JoinColumn({ name: 'employee_id' })
     employee!: Employee
 
     @Column({ type: 'timestamp', name: 'opening_time' })

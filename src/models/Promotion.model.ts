@@ -15,13 +15,13 @@ export class Promotion  {
     type!: PromotionType;
 
     @Column({ type: 'text', nullable: true })
-    description!: string;
+    description!: string | null; 
 
     @Column({ type: 'uuid', name: 'product_id', nullable: true })
-    productId!: string;
+    productId!: string | null;
 
     @Column({ type: 'uuid', name: 'category_id', nullable: true })
-    categoryId!: string;
+    categoryId!: string | null;
 
     @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
     value!: number;

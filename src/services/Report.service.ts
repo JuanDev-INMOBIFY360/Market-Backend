@@ -23,7 +23,7 @@ export class ReportService {
             relations: ['items', 'items.product', 'employee']
         });
 
-        const total = sales.reduce((sum, sale) => sum + sale.total, 0);
+        const total = sales.reduce((sum, sale) => sum + Number(sale.total), 0);
         const transactions = sales.length;
         const averageTicket = transactions > 0 ? total / transactions : 0;
 
@@ -35,13 +35,13 @@ export class ReportService {
                 const productId = item.productId;
                 const existing = productCount.get(productId);
                 if (existing) {
-                    existing.quantity += item.quantity;
-                    existing.total += item.subtotal;
+                    existing.quantity += Number(item.quantity);
+                    existing.total += Number(item.subtotal);
                 } else {
                     productCount.set(productId, {
                         name: item.product?.name || 'Producto',
-                        quantity: item.quantity,
-                        total: item.subtotal
+                        quantity: Number(item.quantity),
+                        total: Number(item.subtotal)
                     });
                 }
             }
@@ -70,7 +70,7 @@ export class ReportService {
             relations: ['items', 'items.product', 'employee']
         });
 
-        const total = sales.reduce((sum, sale) => sum + sale.total, 0);
+        const total = sales.reduce((sum, sale) => sum + Number(sale.total), 0);
         const transactions = sales.length;
 
         // Agrupar por día
@@ -120,13 +120,13 @@ export class ReportService {
                 const productId = item.productId;
                 const existing = productStats.get(productId);
                 if (existing) {
-                    existing.quantity += item.quantity;
-                    existing.total += item.subtotal;
+                    existing.quantity += Number(item.quantity);
+                    existing.total += Number(item.subtotal);
                 } else {
                     productStats.set(productId, {
                         name: item.product?.name || 'Producto',
-                        quantity: item.quantity,
-                        total: item.subtotal
+                        quantity: Number(item.quantity),
+                        total: Number(item.subtotal)
                     });
                 }
             }
@@ -281,7 +281,7 @@ export class ReportService {
             where: purchaseWhere
         });
 
-        const totalTaxCollected = sales.reduce((sum, sale) => sum + (sale.tax || 0), 0);
+        const totalTaxCollected = sales.reduce((sum, sale) => sum + (Number(sale.tax) || 0), 0);
         const totalTaxPaid = purchases.reduce((sum: number, purchase: any) => sum + (purchase.tax || 0), 0);
         const taxToPay = totalTaxCollected - totalTaxPaid;
 

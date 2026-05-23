@@ -18,7 +18,7 @@ export class DashboardService {
                 status: 'completed'
             }
         });
-        const total = sales.reduce((sum, sale) => sum + sale.total, 0)
+        const total = sales.reduce((sum, sale) => sum + Number(sale.total), 0);
         const count = sales.length
         const average = count > 0 ? total / count : 0
 
@@ -49,10 +49,10 @@ export class DashboardService {
             }
         });
 
-        const total = sales.reduce((sum, sale) => sum + sale.total, 0);
+        const total = sales.reduce((sum, sale) => sum + Number(sale.total), 0);
         const count = sales.length;
         const average = count > 0 ? total / count : 0;
-        const lastMonthTotal = lastMonthSales.reduce((sum, sale) => sum + sale.total, 0);
+        const lastMonthTotal = lastMonthSales.reduce((sum, sale) => sum + Number(sale.total), 0);
 
         let comparison = 0;
         if (lastMonthTotal > 0) {
@@ -140,7 +140,7 @@ export class DashboardService {
         for (const sale of sales) {
             const hour = sale.saleDate.getHours();
             const index = (hour - twentyFourHoursAgo.getHours() + 24) % 24;
-            totals[index] += sale.total;
+            totals[index] += Number(sale.total);
             transactions[index] += 1;
         }
 
@@ -169,18 +169,18 @@ export class DashboardService {
             const existing = methodsMap.get(method);
             if (existing) {
                 existing.count++;
-                existing.total += sale.total;
+                existing.total += Number(sale.total);
             } else {
-                methodsMap.set(method, { count: 1, total: sale.total });
+                methodsMap.set(method, { count: 1, total: Number(sale.total) });
             }
         }
 
-        const totalSales = sales.reduce((sum, sale) => sum + sale.total, 0);
+        const totalSales = sales.reduce((sum, sale) => sum + Number(sale.total), 0);
         const result = Array.from(methodsMap.entries()).map(([method, data]) => ({
             method: this.getMethodName(method),
             count: data.count,
-            total: data.total,
-            percentage: totalSales > 0 ? (data.total / totalSales) * 100 : 0
+            total: Number(data.total),
+            percentage: totalSales > 0 ? (Number(data.total) / totalSales) * 100 : 0
         }));
 
         result.sort((a, b) => b.total - a.total);
@@ -218,13 +218,13 @@ async getTopProductsToday(limit: number = 5): Promise<{ name: string; quantity: 
             for (const item of sale.items) {
                 const existing = productStats.get(item.productId);
                 if (existing) {
-                    existing.quantity += item.quantity;
-                    existing.total += item.subtotal;
+                    existing.quantity += Number(item.quantity);
+                    existing.total += Number(item.subtotal);
                 } else {
                     productStats.set(item.productId, {
                         name: item.product?.name || 'Producto',
-                        quantity: item.quantity,
-                        total: item.subtotal
+                        quantity: Number(item.quantity),
+                        total: Number(item.subtotal)
                     });
                 }
             }

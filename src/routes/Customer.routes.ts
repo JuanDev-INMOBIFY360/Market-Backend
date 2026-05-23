@@ -11,7 +11,7 @@ export class CustomerRoutes {
     constructor() {
         this.router = Router();
         this.customerController = new CustomerController();
-        this.getRouter();
+        this.initRoutes();
     }
 
     private initRoutes(): void {

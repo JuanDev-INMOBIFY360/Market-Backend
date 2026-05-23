@@ -29,7 +29,7 @@ export class InventoryMovement {
     stockAfter!: number;
 
     @Column({ type: 'uuid', name: 'reference_id', nullable: true })
-    referenceId!: string;
+    referenceId!: string | null;
 
     @Column({ type: 'varchar', length: 100, nullable: true })
     reason!: string;

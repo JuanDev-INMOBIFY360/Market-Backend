@@ -1,14 +1,18 @@
 import { PromotionRepository } from "../repositories/Promotion.repository";
 import { Promotion, PromotionType } from "../models/Promotion.model";
 import { validate as isUUID } from 'uuid';
+import { appDataSource } from "../config/database.config";
+import { ProductsRepository } from "../repositories/Products.repository";
 
 
 export class PromotionService {
 
     private promotionRepository: PromotionRepository
+    private productsRepository: ProductsRepository
 
     constructor() {
         this.promotionRepository = PromotionRepository.getInstance();
+        this.productsRepository = ProductsRepository.getInstance();
     }
 
     async createPromotion(data: {
@@ -37,7 +41,7 @@ export class PromotionService {
         //validar segun el tipo 
         switch (data.type) {
             case 'percentage_product':
-                if (!data.productId || isUUID(data.productId)) {
+                if (!data.productId || !isUUID(data.productId)) {
                     throw new Error('Producto requerido para promoción de producto');
                 }
                 if (!data.value || data.value <= 0 || data.value > 100) {
@@ -82,8 +86,8 @@ export class PromotionService {
         promotion.name = data.name;
         promotion.type = data.type;
         promotion.description = data.description || '';
-        promotion.productId = data.productId || '';
-        promotion.categoryId = data.categoryId || '';
+        promotion.productId = data.productId ?? null;
+        promotion.categoryId = data.categoryId ?? null;
         promotion.value = data.value || 0;
         promotion.minPurchase = data.minPurchase || 0;
         promotion.buyQuantity = data.buyQuantity || 0;
@@ -144,9 +148,9 @@ export class PromotionService {
             }
             let discount = 0
             switch (promo.type) {
-                case 'percentage_product':
+                case 'percentage_total':
                     if (total >= promo.minPurchase) {
-                        discount = total * (promo.value / 1000)
+                        discount = total * (promo.value / 100)
                     }
                     break;
                 case 'percentage_product':
@@ -157,7 +161,19 @@ export class PromotionService {
                     }
                     break;
                 case 'percentage_category':
-                    // Necesitaríamos obtener la categoría del producto
+                    if (!promo.categoryId)break;
+
+                    const producsId =  cartItems.map(item => item.productId);
+                    
+                    for (const items of cartItems) {
+                        const products = await this.productsRepository.findById(items.productId);
+                        if(products && products.categoryId === promo.categoryId){
+                            discount += items.subtotal * (promo.value / 100);
+                        }
+                    } 
+                        
+                    
+                   
                     break;
                 case 'buy_x_get_y':
                     for (const item of cartItems) {

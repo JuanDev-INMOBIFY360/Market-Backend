@@ -19,17 +19,19 @@ export class SaleRepository {
     }
 
     async findNextSaleNumber(): Promise<string> {
-        const lastSale = await this.repo.findOne({
-            order: { saleDate: 'DESC' }
+        const lastSale = await this.repo.find({
+            order: { saleDate: 'DESC' },
+            take: 1
         });
-        
-        if (!lastSale || !lastSale.saleNumber) {
+
+        const sale = lastSale[0];
+
+        if (!sale || !sale.saleNumber) {
             return '0001';
         }
-        
-        const lastNumber = parseInt(lastSale.saleNumber, 10);
-        const nextNumber = (lastNumber + 1).toString().padStart(4, '0');
-        return nextNumber;
+
+        const lastNumber = parseInt(sale.saleNumber, 10);
+        return (lastNumber + 1).toString().padStart(4, '0');
     }
 
     async save(sale: Sale): Promise<Sale> {
