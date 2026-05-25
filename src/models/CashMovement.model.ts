@@ -1,60 +1,74 @@
-import { PrimaryGeneratedColumn,Column,Entity,ManyToMany,CreateDateColumn,ManyToOne } from "typeorm";
-import { Employee } from "./Employee.model";
+import {
+	Column,
+	CreateDateColumn,
+	Entity,
+	ManyToMany,
+	ManyToOne,
+	PrimaryGeneratedColumn,
+} from "typeorm";
 import { CashShift } from "./CashShift.model";
+import { Employee } from "./Employee.model";
 
+export type MovementType =
+	| "opening"
+	| "sale"
+	| "refund"
+	| "expense"
+	| "income"
+	| "withdrawal";
+export type PaymentMethod = "cash" | "card" | "transfer" | "points";
 
-export type MovementType = 'opening' | 'sale' | 'refund' | 'expense' | 'income' | 'withdrawal';
-export type PaymentMethod = 'cash' | 'card' | 'transfer' | 'points';
+@Entity({ name: "cash_movements" })
+export class CashMovement {
+	@PrimaryGeneratedColumn("uuid")
+	id!: string;
 
-@Entity({name: 'cash_movements'})
+	@Column({ type: "uuid", name: "cash_shift_id" })
+	cashShiftId!: string;
 
-export class  CashMovement  {
+	@ManyToOne(() => CashShift)
+	cashShift!: CashShift;
 
-    @PrimaryGeneratedColumn('uuid')
-    id!: string
+	@Column({ type: "uuid", name: "employee_id" })
+	employeeId!: string;
 
-    @Column({type: 'uuid', name: 'cash_shift_id' })
-    cashShiftId!: string
+	@ManyToOne(() => Employee)
+	employee!: Employee;
 
-    @ManyToOne(() => CashShift)
-    cashShift! : CashShift
+	@Column({ type: "varchar", length: 30 })
+	type!: MovementType;
 
-    @Column({type: 'uuid', name: 'employee_id' })
-    employeeId!: string
+	@Column({ type: "decimal", precision: 10, scale: 2 })
+	amount!: number;
 
-    @ManyToOne(() => Employee)
-    employee!: Employee
-    
-    @Column({ type: 'varchar', length: 30 })
-    type!: MovementType;
+	@Column({
+		type: "varchar",
+		length: 20,
+		nullable: true,
+		name: "payment_method",
+	})
+	paymentMethod!: PaymentMethod;
 
-    @Column({ type: 'decimal', precision: 10, scale: 2 })
-    amount!: number;
+	@Column({ type: "uuid", name: "reference_id", nullable: true })
+	referenceId!: string;
 
-    @Column({ type: 'varchar', length: 20, nullable: true, name: 'payment_method' })
-    paymentMethod!: PaymentMethod;
+	@Column({ type: "text", nullable: true })
+	description!: string;
 
-    @Column({ type: 'uuid', name: 'reference_id', nullable: true })
-    referenceId!: string;
+	@CreateDateColumn({ name: "created_at" })
+	createdAt!: Date;
 
-    @Column({ type: 'text', nullable: true })
-    description!: string;
-
-    @CreateDateColumn({ name: 'created_at' })
-    createdAt!: Date;
-    
-    toJSON(){
-        return{
-           id: this.id,
-            cashShiftId: this.cashShiftId,
-            employeeId: this.employeeId,
-            type: this.type,
-            amount: this.amount,
-            paymentMethod: this.paymentMethod,
-            referenceId: this.referenceId,
-            description: this.description,
-            createdAt: this.createdAt
-
-        }
-    }
+	toJSON() {
+		return {
+			id: this.id,
+			cashShiftId: this.cashShiftId,
+			employeeId: this.employeeId,
+			type: this.type,
+			amount: this.amount,
+			paymentMethod: this.paymentMethod,
+			referenceId: this.referenceId,
+			description: this.description,
+			createdAt: this.createdAt,
+		};
+	}
 }

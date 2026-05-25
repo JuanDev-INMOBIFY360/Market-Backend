@@ -1,53 +1,59 @@
-import { Request, Response, NextFunction } from 'express';
-import { JWTUtil } from '../utils/jwt.util';
+import type { NextFunction, Request, Response } from "express";
+import { JWTUtil } from "../utils/jwt.util";
 
 export interface AuthRequest extends Request {
-    user?: {
-        id: string;
-        code: string;
-        role: string;
-        shiftId: string | null
-    };
+	user?: {
+		id: string;
+		code: string;
+		role: string;
+		shiftId: string | null;
+	};
 }
 
 export class AuthMiddleware {
-    static verificarToken(req: AuthRequest, res: Response, next: NextFunction): void {
-        const authHeader = req.headers.authorization;
-        
-        if (!authHeader) {
-            res.status(401).json({ error: 'Token no proporcionado' });
-            return;
-        }
+	static verificarToken(
+		req: AuthRequest,
+		res: Response,
+		next: NextFunction,
+	): void {
+		const authHeader = req.headers.authorization;
 
-        const token = authHeader.split(' ')[1];
-        if (!token) {
-            res.status(401).json({ error: 'Formato de token inválido' });
-            return;
-        }
+		if (!authHeader) {
+			res.status(401).json({ error: "Token no proporcionado" });
+			return;
+		}
 
-        const decoded = JWTUtil.verifyToken(token);
-        if (!decoded) {
-            res.status(401).json({ error: 'Token inválido o expirado' });
-            return;
-        }
+		const token = authHeader.split(" ")[1];
+		if (!token) {
+			res.status(401).json({ error: "Formato de token inválido" });
+			return;
+		}
 
-        req.user = decoded;
-        next();
-    }
+		const decoded = JWTUtil.verifyToken(token);
+		if (!decoded) {
+			res.status(401).json({ error: "Token inválido o expirado" });
+			return;
+		}
 
-    static verificarRol(rolesPermitidos: string[]) {
-        return (req: AuthRequest, res: Response, next: NextFunction): void => {
-            if (!req.user) {
-                res.status(401).json({ error: 'No autenticado' });
-                return;
-            }
+		req.user = decoded;
+		next();
+	}
 
-            if (!rolesPermitidos.includes(req.user.role)) {
-                res.status(403).json({ error: 'No tienes permiso para realizar esta acción' });
-                return;
-            }
+	static verificarRol(rolesPermitidos: string[]) {
+		return (req: AuthRequest, res: Response, next: NextFunction): void => {
+			if (!req.user) {
+				res.status(401).json({ error: "No autenticado" });
+				return;
+			}
 
-            next();
-        };
-    }
+			if (!rolesPermitidos.includes(req.user.role)) {
+				res
+					.status(403)
+					.json({ error: "No tienes permiso para realizar esta acción" });
+				return;
+			}
+
+			next();
+		};
+	}
 }
