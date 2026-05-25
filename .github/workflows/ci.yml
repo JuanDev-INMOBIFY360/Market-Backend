@@ -39,7 +39,7 @@ jobs:
 
 
       - name: scanear vulnerabilidades trivy
-        uses: aquasecurity/trivy-action@0.24.0
+        uses: aquasecurity/trivy-action@master
         with:
           scan-type: 'fs'
           scan-ref: '.'
