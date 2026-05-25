@@ -1,6 +1,10 @@
 # Market-Backend
 
-[![CI](https://github.com/JuanDev-INMOBIFY360/Market-Backend/actions/workflows/ci.yml/badge.svg)](https://github.com/JuanDev-INMOBIFY360/Market-Backend/actions/workflows/ci.yml)
+[![CI](https://github.com/JuanDev-INMOBIFY360/Market-Backend/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/JuanDev-INMOBIFY360/Market-Backend/actions/workflows/ci.yml)
+
+![Node.js](https://img.shields.io/badge/node.js-20.x-green)
+![TypeScript](https://img.shields.io/badge/typescript-5.x-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
 
 ## Descripción
 ...
