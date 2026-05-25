@@ -29,6 +29,9 @@ jobs:
       - name: verificar tipos 
         run: npx tsc --noEmit
 
+      - name: pruebas unitarias
+        run: npm test
+
 
   security:
     runs-on: ubuntu-latest
@@ -36,13 +39,12 @@ jobs:
     steps:
       - name: checkout codigo
         uses: actions/checkout@v4
-
-
       - name: scanear vulnerabilidades trivy
-        uses: aquasecurity/trivy-action@0.24.0
+        uses: aquasecurity/trivy-action@master
         with:
           scan-type: 'fs'
           scan-ref: '.'
           severity: 'CRITICAL,HIGH'
+
 
     
