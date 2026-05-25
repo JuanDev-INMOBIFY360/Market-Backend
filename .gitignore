@@ -139,4 +139,4 @@ reports/
 .vsts/
 
 # === GitHub ===
-.github/dependabot.yml
+.github/dependabot.ymlnode_modules/
