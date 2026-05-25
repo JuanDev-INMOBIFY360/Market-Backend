@@ -1,130 +1,142 @@
-# =========================
-# DEPENDENCIAS
-# =========================
+# === Dependencias ===
 node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
 
-# =========================
-# BUILDS / COMPILADOS
-# =========================
+# === Compilación ===
 dist/
 build/
-out/
-
-# TypeScript
 *.tsbuildinfo
 
-# =========================
-# VARIABLES DE ENTORNO
-# =========================
+# === Variables de entorno ===
 .env
-.env.*
-!.env.example
+.env.local
+.env.production
+.env.development
+.env.test
+*.env
 
-# =========================
-# LOGS
-# =========================
+# === Base de datos ===
+*.sql
+*.db
+*.sqlite
+*.sqlite3
+*.pgsql
+*.pgdata
+dump.sql
+*.backup
+
+# === Backups (tu módulo de backups) ===
+backups/
+*.zip
+*.sql
+*.dump
+*.backup
+*.tar.gz
+
+# === Facturación (PDFs generados) ===
+invoices/
+tickets/
+*.pdf
+*.html
+
+# === Logs ===
 logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
+pm2-*.log
+pm2.log
 
-# =========================
-# TESTING / COVERAGE
-# =========================
-coverage/
-.nyc_output/
-
-# Jest
-jest-results/
-junit.xml
-
-# =========================
-# TEMPORALES
-# =========================
-tmp/
-temp/
-.tmp/
-
-# =========================
-# UPLOADS / ARCHIVOS
-# =========================
-uploads/
-invoices/
-exports/
-reports/
-
-# PDFs generados
-*.pdf
-
-# Excel exportados
-*.xlsx
-*.csv
-
-# =========================
-# CACHE
-# =========================
-.cache/
-.parcel-cache/
-
-# =========================
-# IDEs / EDITORES
-# =========================
-
-# VSCode
-.vscode/*
-!.vscode/extensions.json
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-
-# JetBrains
+# === IDE y Editor ===
+.vscode/
 .idea/
-
-# Vim
 *.swp
 *.swo
-
-# =========================
-# SISTEMA OPERATIVO
-# =========================
+*~
 .DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.project
+.classpath
+.settings/
+
+# === Sistema operativo ===
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+Desktop.ini
 
-# =========================
-# DOCKER
-# =========================
-docker-data/
-*.pid
+# === Pruebas y cobertura ===
+coverage/
+.nyc_output/
+*.lcov
+jest.config.js
+*.test.ts
+*.spec.ts
+__tests__/
+__mocks__/
 
-# =========================
-# ORM
-# =========================
+# === TypeScript ===
+*.tsbuildinfo
+tsconfig.tsbuildinfo
 
-# TypeORM
-typeorm.log
+# === Docker ===
+docker-compose.override.yml
+*.tar
+*.tar.gz
 
-# Prisma
-prisma/dev.db
-prisma/dev.db-journal
-
-# =========================
-# PM2
-# =========================
-.pids/
-*.pid
-*.seed
-*.pid.lock
-
-# =========================
-# SEGURIDAD
-# =========================
+# === Certificados y secretos ===
 *.pem
 *.key
 *.crt
+*.p12
+*.pfx
+secrets/
+certificates/
 
-# =========================
-# ARCHIVOS GENERADOS
-# =========================
-generated/
+# === Documentación generada ===
+docs/api/
+apidoc/
+typedoc/
+
+# === Archivos temporales ===
+tmp/
+temp/
+*.tmp
+*.temp
+*.cache
+
+# === Reportes ===
+reports/
+*.html
+*.json
+
+# === Herramientas de calidad ===
+.eslintcache
+.prettiercache
+.biomecache
+
+# === Editor de código ===
+*.code-workspace
+.cursor/
+.vscode-test/
+
+# === Azure DevOps ===
+.azuredevops/
+.vsts/
+
+# === GitHub ===
+.github/dependabot.yml

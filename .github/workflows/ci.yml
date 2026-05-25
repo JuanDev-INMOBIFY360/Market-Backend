@@ -1,0 +1,48 @@
+name: CI
+
+on: 
+  push:
+    branches: [develop , maester]
+  pull_request:
+    branches: [develop , maester]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name:  Checkout código
+        uses: actions/checkout@v4
+
+      - name: configurar node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: instalar dependencias
+        run: npm install
+
+      - name: biome check
+        run: npx biome ci src/
+
+      - name: verificar tipos 
+        run: npx tsc --noEmit
+
+
+  security:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout codigo
+        uses: actions/checkout@v4
+
+
+      - name: scanear vulnerabilidades trivy
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          severity: 'CRITICAL,HIGH'
+
+    
