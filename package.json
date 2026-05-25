@@ -13,6 +13,7 @@
     "lint": "biome check src/",
     "lint:fix": "biome check --apply src/",
     "format": "biome format --write src/"
+    
   },
   "keywords": [],
   "author": "",

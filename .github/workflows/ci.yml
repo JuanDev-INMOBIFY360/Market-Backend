@@ -31,6 +31,15 @@ jobs:
 
       - name: pruebas unitarias
         run: npm test
+      
+      - name:  generar reporte de cobertura
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: true
 
 
   security:
