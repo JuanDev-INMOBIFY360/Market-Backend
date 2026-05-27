@@ -55,7 +55,7 @@ export class Products {
 	@Column({ type: "varchar", length: 5, default: "A", name: "tax_code" })
 	taxCode!: string; // A=19%, B=5%, C=EXENTO, D=CONSUMO
 
-	@Column({type: "varchar", length: 20, default: "unit"})
+	@Column({ type: "varchar", length: 20, default: "unit" })
 	unit!: string; // unit, kg, liter, etc.
 
 	@Column({ type: "boolean", default: true, name: "is_active" })

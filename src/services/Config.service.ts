@@ -43,14 +43,14 @@ export class ConfigService {
 			case "consumption_tax":
 			case "points_percentage": {
 				const num = parseFloat(value);
-				if (isNaN(num) || num < 0 || num > 100) {
+				if (Number.isNaN(num) || num < 0 || num > 100) {
 					throw new Error(`${key} debe ser un número entre 0 y 100`);
 				}
 				break;
 			}
 			case "point_value": {
 				const val = parseFloat(value);
-				if (isNaN(val) || val <= 0) {
+				if (Number.isNaN(val) || val <= 0) {
 					throw new Error("El valor del punto debe ser mayor a 0");
 				}
 				break;

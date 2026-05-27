@@ -1,5 +1,4 @@
 import { validate as isUUID } from "uuid";
-import { appDataSource } from "../config/database.config";
 import { Promotion, type PromotionType } from "../models/Promotion.model";
 import { ProductsRepository } from "../repositories/Products.repository";
 import { PromotionRepository } from "../repositories/Promotion.repository";
@@ -116,7 +115,7 @@ export class PromotionService {
 		id: string,
 		data: Partial<Promotion>,
 	): Promise<Promotion> {
-		const promotion = await this.getPromotionById(id);
+		const _promotion = await this.getPromotionById(id);
 		const updated = await this.promotionRepository.update(id, data);
 		if (!updated) {
 			throw new Error("Error al actualizar la promoción");
@@ -125,7 +124,7 @@ export class PromotionService {
 	}
 
 	async deletePromotion(id: string): Promise<void> {
-		const promotion = await this.getPromotionById(id);
+		const _promotion = await this.getPromotionById(id);
 		await this.promotionRepository.delete(id);
 	}
 
@@ -162,7 +161,7 @@ export class PromotionService {
 				case "percentage_category": {
 					if (!promo.categoryId) break;
 
-					const producsId = cartItems.map((item) => item.productId);
+					const _producsId = cartItems.map((item) => item.productId);
 
 					for (const items of cartItems) {
 						const products = await this.productsRepository.findById(

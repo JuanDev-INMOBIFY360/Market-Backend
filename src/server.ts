@@ -40,12 +40,14 @@ class Server {
 	}
 
 	private middleware(): void {
-		this.app.use(cors({
-			origin: "http://localhost:5173",
-			methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-			allowedHeaders: ["Content-Type", "Authorization"],
-			credentials:true
-		}));
+		this.app.use(
+			cors({
+				origin: "http://localhost:5173",
+				methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+				allowedHeaders: ["Content-Type", "Authorization"],
+				credentials: true,
+			}),
+		);
 		this.app.use(express.json());
 		this.app.use(express.urlencoded({ extended: true }));
 	}
@@ -88,7 +90,7 @@ class Server {
 		this.app.use("/cash", cashMovementRoutes.getRouter());
 
 		this.app.use;
-		this.app.get("/health", (req: Request, res: Response) => {
+		this.app.get("/health", (_req: Request, res: Response) => {
 			res.json({
 				status: "ok",
 				message: "Supermercado API funcionando",

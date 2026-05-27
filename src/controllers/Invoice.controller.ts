@@ -1,6 +1,5 @@
+import * as fs from "node:fs";
 import type { Request, Response } from "express";
-import * as fs from "fs";
-import { AuthRequest } from "../middlewares/auth.middleware";
 import { InvoiceService } from "../services/Invoice.service";
 
 export class InvoiceController {

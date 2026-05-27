@@ -1,11 +1,9 @@
 // src/services/Report.service.ts
 
-import { Between, LessThanOrEqual, MoreThanOrEqual } from "typeorm";
+import { Between } from "typeorm";
 import { appDataSource } from "../config/database.config";
-import { Employee } from "../models/Employee.model";
 import { Products } from "../models/Products.model";
 import { Sale } from "../models/Sale.model";
-import { SaleItem } from "../models/SaleItem.model";
 
 export class ReportService {
 	// ============ REPORTE 1: VENTAS DEL DÍA ============

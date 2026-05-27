@@ -7,8 +7,8 @@ export class AuditLogController {
 
 	getAll = async (req: AuthRequest, res: Response): Promise<void> => {
 		try {
-			const page = parseInt(req.query.page as string) || 1;
-			const limit = parseInt(req.query.limit as string) || 100;
+			const page = parseInt(req.query.page as string, 10) || 1;
+			const limit = parseInt(req.query.limit as string, 10) || 100;
 
 			const result = await this.auditLogService.getAllLogs(page, limit);
 			res.status(200).json(result);

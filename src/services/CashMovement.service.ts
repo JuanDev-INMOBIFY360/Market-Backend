@@ -1,8 +1,4 @@
-import {
-	CashMovement,
-	MovementType,
-	PaymentMethod,
-} from "../models/CashMovement.model";
+import { CashMovement } from "../models/CashMovement.model";
 import { CashMovementRepository } from "../repositories/CashMovement.repository";
 import { CashShiftRepository } from "../repositories/CashShift.repository";
 

@@ -34,7 +34,7 @@ export class CustomerController {
 		}
 	};
 
-	getAll = async (req: Request, res: Response): Promise<void> => {
+	getAll = async (_req: Request, res: Response): Promise<void> => {
 		try {
 			const customers = await this.customerService.getAllCustomers();
 			res.status(200).json({

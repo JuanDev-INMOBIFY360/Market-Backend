@@ -1,10 +1,8 @@
-import { text } from "node:stream/consumers";
 import {
 	Column,
 	CreateDateColumn,
 	Entity,
 	PrimaryColumn,
-	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from "typeorm";
 

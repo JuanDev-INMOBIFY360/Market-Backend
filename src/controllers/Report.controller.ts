@@ -10,7 +10,7 @@ export class ReportController {
 	}
 
 	// GET /reports/sales/daily
-	getDailySales = async (req: Request, res: Response): Promise<void> => {
+	getDailySales = async (_req: Request, res: Response): Promise<void> => {
 		try {
 			const report = await this.reportService.getDailySales();
 			res.status(200).json(report);
@@ -40,7 +40,7 @@ export class ReportController {
 	// GET /reports/products/top?limit=10
 	getTopProducts = async (req: Request, res: Response): Promise<void> => {
 		try {
-			const limit = parseInt(req.query.limit as string) || 10;
+			const limit = parseInt(req.query.limit as string, 10) || 10;
 			const { start, end } = req.query;
 			const startDate = start ? new Date(start as string) : undefined;
 			const endDate = end ? new Date(end as string) : undefined;
@@ -58,7 +58,7 @@ export class ReportController {
 	};
 
 	// GET /reports/products/low-stock
-	getLowStock = async (req: Request, res: Response): Promise<void> => {
+	getLowStock = async (_req: Request, res: Response): Promise<void> => {
 		try {
 			const report = await this.reportService.getLowStockProducts();
 			res.status(200).json(report);

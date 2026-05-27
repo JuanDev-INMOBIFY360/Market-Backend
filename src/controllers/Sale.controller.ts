@@ -45,7 +45,7 @@ export class SaleController {
 			const index = req.params.index as string;
 			const cart = await this.saleService.removeFromCart(
 				shiftId,
-				parseInt(index),
+				parseInt(index, 10),
 			);
 			res.status(200).json({ cart });
 		} catch (error: any) {
@@ -65,7 +65,7 @@ export class SaleController {
 			const { quantity } = req.body;
 			const cart = await this.saleService.updateCartItem(
 				shiftId,
-				parseInt(index),
+				parseInt(index, 10),
 				quantity,
 			);
 			res.status(200).json({ cart });
@@ -145,7 +145,7 @@ export class SaleController {
 		}
 	};
 
-	getAllSales = async (req: Request, res: Response): Promise<void> => {
+	getAllSales = async (_req: Request, res: Response): Promise<void> => {
 		try {
 			const sales = await this.saleService.getAllSales();
 			res.status(200).json({

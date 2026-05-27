@@ -62,7 +62,7 @@ export class CategoryRepository {
 		);
 	}
 
-	async hasProducts(id: string): Promise<boolean> {
+	async hasProducts(_id: string): Promise<boolean> {
 		//falta poner los productos
 		return false;
 	}

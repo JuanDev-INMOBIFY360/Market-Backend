@@ -1,4 +1,3 @@
-import { UUID } from "typeorm/driver/mongodb/bson.typings.js";
 import { validate as isUUID } from "uuid";
 import { Customer } from "../models/Customer.model";
 import { PointsHistory } from "../models/PointsHistory.model";
@@ -75,7 +74,7 @@ export class CustomerService {
 	}
 
 	async updateCustomer(id: string, data: Partial<Customer>): Promise<Customer> {
-		const customer = await this.getCustomerById(id);
+		const _customer = await this.getCustomerById(id);
 		const updated = await this.customerRepository.update(id, data);
 		if (!updated) {
 			throw new Error("Error al actualizar el cliente");

@@ -17,7 +17,7 @@ export class ProductService {
 		name: string,
 		salePrice: number,
 		purchasePrice: number,
-		createdBy: string,
+		_createdBy: string,
 		categoryId?: string,
 		description?: string,
 		offerPrice?: number,
@@ -74,7 +74,6 @@ export class ProductService {
 		product.taxCode = taxCode || "A";
 		product.unit = unit || "unit";
 		product.isActive = true;
-		
 
 		return await this.productRepository.save(product);
 	}
@@ -142,7 +141,7 @@ export class ProductService {
 			isActive?: boolean;
 		},
 	): Promise<Products> {
-		const product = await this.getProductById(id);
+		const _product = await this.getProductById(id);
 
 		// Validaciones de precio
 		if (data.salePrice !== undefined && data.salePrice <= 0) {
@@ -182,7 +181,7 @@ export class ProductService {
 	}
 
 	async deleteProduct(id: string): Promise<void> {
-		const product = await this.getProductById(id);
+		const _product = await this.getProductById(id);
 
 		// Verificar si tiene ventas asociadas (cuando implementemos ventas)
 		// Temporal: permitir eliminación

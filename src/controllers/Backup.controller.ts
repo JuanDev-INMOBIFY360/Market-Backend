@@ -1,4 +1,4 @@
-import { Request, type Response } from "express";
+import type { Response } from "express";
 import type { AuthRequest } from "../middlewares/auth.middleware";
 import { BackupService } from "../services/Backup.service";
 
@@ -10,7 +10,7 @@ export class BackupController {
 	}
 
 	// POST /backup/create
-	createBackup = async (req: AuthRequest, res: Response): Promise<void> => {
+	createBackup = async (_req: AuthRequest, res: Response): Promise<void> => {
 		try {
 			const backup = await this.backupService.createBackup();
 			res.status(201).json({
@@ -23,7 +23,10 @@ export class BackupController {
 	};
 
 	// POST /backup/create-full
-	createFullBackup = async (req: AuthRequest, res: Response): Promise<void> => {
+	createFullBackup = async (
+		_req: AuthRequest,
+		res: Response,
+	): Promise<void> => {
 		try {
 			const backup = await this.backupService.createFullBackup();
 			res.status(201).json({
@@ -36,7 +39,7 @@ export class BackupController {
 	};
 
 	// GET /backup/list
-	listBackups = async (req: AuthRequest, res: Response): Promise<void> => {
+	listBackups = async (_req: AuthRequest, res: Response): Promise<void> => {
 		try {
 			const backups = await this.backupService.listBackups();
 			res.status(200).json({ backups });

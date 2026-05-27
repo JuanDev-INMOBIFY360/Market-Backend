@@ -53,7 +53,7 @@ export class EmployeeController {
 		}
 	};
 
-	getAll = async (req: Request, res: Response): Promise<void> => {
+	getAll = async (_req: Request, res: Response): Promise<void> => {
 		try {
 			const employees = await this.employeeService.getAllEmployees();
 			res.status(200).json({

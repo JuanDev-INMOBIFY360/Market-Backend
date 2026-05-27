@@ -56,7 +56,7 @@ export class PromotionController {
 		}
 	};
 
-	getAll = async (req: Request, res: Response): Promise<void> => {
+	getAll = async (_req: Request, res: Response): Promise<void> => {
 		try {
 			const promotions = await this.promotionService.getAllPromotions();
 			res.status(200).json({
@@ -67,7 +67,7 @@ export class PromotionController {
 		}
 	};
 
-	getActive = async (req: Request, res: Response): Promise<void> => {
+	getActive = async (_req: Request, res: Response): Promise<void> => {
 		try {
 			const promotions = await this.promotionService.getActivePromotions();
 			res.status(200).json({

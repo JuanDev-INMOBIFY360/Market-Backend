@@ -4,7 +4,6 @@ import {
 	InventoryMovement,
 	type MovementType,
 } from "../models/InventoryMovement.model";
-import { Products } from "../models/Products.model";
 import { InventoryMovementRepository } from "../repositories/InventoryMovement.repository";
 import { ProductsRepository } from "../repositories/Products.repository";
 

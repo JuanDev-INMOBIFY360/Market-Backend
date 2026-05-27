@@ -14,10 +14,10 @@ import { PromotionService } from "./Promotion.service";
 export class SaleService {
 	private saleRepository: SaleRepository;
 	private productRepository: ProductsRepository;
-	private cashShiftRepository: CashShiftRepository;
 	private cashMovementRepository: CashMovementRepository;
 	private inventoryService: InventoryService;
 	private promotionService: PromotionService;
+	private cashShiftRepository: CashShiftRepository;
 	private carts: Map<string, Cart> = new Map();
 
 	constructor() {
@@ -138,7 +138,7 @@ export class SaleService {
 			// Calcular impuesto sobre el subtotal con descuento
 			const taxAmount = this.calculateItemTax(
 				itemDiscountedSubtotal,
-				item.taxCode,
+				item.taxCode ?? "A",
 			);
 			totalTax += taxAmount;
 		}
@@ -210,6 +210,9 @@ export class SaleService {
 		const saleItems: SaleItem[] = [];
 		for (const item of items) {
 			const product = await this.productRepository.findById(item.productId);
+			if (!product) {
+				throw new Error(`Producto no encontrado: ${item.productId}`);
+			}
 
 			// Calcular la proporción del descuento para este item
 			const itemProportion = item.subtotal / subtotal;
@@ -217,7 +220,7 @@ export class SaleService {
 			const itemSubtotalWithDiscount = item.subtotal - itemDiscount;
 			const taxAmount = this.calculateItemTax(
 				itemSubtotalWithDiscount,
-				product!.taxCode,
+				product.taxCode ?? "A",
 			);
 
 			const saleItem = new SaleItem();
@@ -227,14 +230,14 @@ export class SaleService {
 			saleItem.unit = item.unit;
 			saleItem.discount = itemDiscount;
 			saleItem.subtotal = itemSubtotalWithDiscount;
-			saleItem.taxCode = product!.taxCode;
+			saleItem.taxCode = product.taxCode ?? "A";
 			saleItem.taxAmount = taxAmount;
 			saleItems.push(saleItem);
 
 			// Disminuir stock
 			await this.productRepository.adjustStock(
 				item.productId,
-				product!.stock - item.quantity,
+				product.stock - item.quantity,
 			);
 		}
 

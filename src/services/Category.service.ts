@@ -91,7 +91,7 @@ export class CategoryService {
 	}
 
 	async deleteCategory(id: string): Promise<void> {
-		const category = await this.getCategoryById(id);
+		const _category = await this.getCategoryById(id);
 
 		// Verificar si tiene productos (cuando implementemos productos)
 		const hasProducts = await this.categoryRepository.hasProducts(id);

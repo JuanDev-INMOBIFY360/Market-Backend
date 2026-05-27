@@ -1,4 +1,3 @@
-import { error } from "node:console";
 import type { Request, Response } from "express";
 import { ConfigService } from "../services/Config.service";
 
@@ -9,7 +8,7 @@ export class ConfigController {
 		this.configService = new ConfigService();
 	}
 
-	getAllConfig = async (req: Request, res: Response): Promise<void> => {
+	getAllConfig = async (_req: Request, res: Response): Promise<void> => {
 		try {
 			const config = await this.configService.getAllConfigs();
 			res.status(200).json({

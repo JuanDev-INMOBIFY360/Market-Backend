@@ -1,4 +1,3 @@
-import { error } from "node:console";
 import type { Request, Response } from "express";
 import type { AuthRequest } from "../middlewares/auth.middleware";
 import { SupplierService } from "../services/Supplier.service";
@@ -36,7 +35,7 @@ export class SupplierController {
 		}
 	};
 
-	getAll = async (req: Request, res: Response): Promise<void> => {
+	getAll = async (_req: Request, res: Response): Promise<void> => {
 		try {
 			const suppliers = await this.supplierService.getAllSupplier();
 			res.status(200).json({
