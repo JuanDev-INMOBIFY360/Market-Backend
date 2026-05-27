@@ -21,7 +21,7 @@ export class InventoryController {
 		}
 	};
 
-	getLowStock = async (req: Request, res: Response): Promise<void> => {
+	getLowStock = async (_req: Request, res: Response): Promise<void> => {
 		try {
 			const products = await this.inventoryService.getLowStockProducts();
 			res.status(200).json({ products });
@@ -30,7 +30,7 @@ export class InventoryController {
 		}
 	};
 
-	getOutOfStock = async (req: Request, res: Response): Promise<void> => {
+	getOutOfStock = async (_req: Request, res: Response): Promise<void> => {
 		try {
 			const products = await this.inventoryService.getOutOfStockProducts();
 			res.status(200).json({ products });

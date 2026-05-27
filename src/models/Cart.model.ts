@@ -6,6 +6,7 @@ export interface CartItem {
 	unitPrice: number;
 	subtotal: number;
 	taxCode: string;
+	unit: string;
 }
 
 export class Cart {

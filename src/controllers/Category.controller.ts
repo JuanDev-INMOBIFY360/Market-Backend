@@ -42,7 +42,7 @@ export class CategoryController {
 		}
 	};
 
-	getAll = async (req: Request, res: Response): Promise<void> => {
+	getAll = async (_req: Request, res: Response): Promise<void> => {
 		try {
 			const categories = await this.categoryService.getAllCategories();
 			res.status(200).json({
@@ -53,7 +53,7 @@ export class CategoryController {
 		}
 	};
 
-	getTree = async (req: Request, res: Response): Promise<void> => {
+	getTree = async (_req: Request, res: Response): Promise<void> => {
 		try {
 			const tree = await this.categoryService.getTree();
 			res.status(200).json({

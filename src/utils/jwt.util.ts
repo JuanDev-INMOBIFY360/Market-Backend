@@ -20,7 +20,7 @@ export class JWTUtil {
 	static verifyToken(token: string): any {
 		try {
 			return jwt.verify(token, JWTUtil.secret);
-		} catch (error) {
+		} catch (_error) {
 			return null;
 		}
 	}

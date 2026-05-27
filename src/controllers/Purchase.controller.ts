@@ -1,4 +1,3 @@
-import { error } from "node:console";
 import type { Request, Response } from "express";
 import type { AuthRequest } from "../middlewares/auth.middleware";
 import { PurchaseService } from "../services/Purchase.service";
@@ -40,7 +39,7 @@ export class PurchaseController {
 		}
 	};
 
-	getAll = async (req: Request, res: Response): Promise<void> => {
+	getAll = async (_req: Request, res: Response): Promise<void> => {
 		try {
 			const purchases = await this.purchasaService.getAllPurcharses();
 			res.status(200).json({

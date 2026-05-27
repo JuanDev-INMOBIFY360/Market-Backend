@@ -27,7 +27,7 @@ export class SaleRepository {
 
 		const sale = lastSale[0];
 
-		if (!sale || !sale.saleNumber) {
+		if (!sale?.saleNumber) {
 			return "0001";
 		}
 

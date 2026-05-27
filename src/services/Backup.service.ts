@@ -1,8 +1,8 @@
+import { exec } from "node:child_process";
+import * as fs from "node:fs";
+import * as path from "node:path";
+import { promisify } from "node:util";
 import archiver from "archiver";
-import { exec } from "child_process";
-import * as fs from "fs";
-import * as path from "path";
-import { promisify } from "util";
 import { appDataSource } from "../config/database.config";
 
 const execPromise = promisify(exec);

@@ -30,6 +30,7 @@ export class ProductController {
 				minStock,
 				location,
 				taxCode,
+				unit,
 			} = req.body;
 
 			if (!barcode || !name || !salePrice || !purchasePrice) {
@@ -53,6 +54,7 @@ export class ProductController {
 				minStock,
 				location,
 				taxCode,
+				unit,
 			);
 
 			res.status(201).json({
@@ -67,8 +69,8 @@ export class ProductController {
 	// GET /products - Listar productos
 	getAll = async (req: Request, res: Response): Promise<void> => {
 		try {
-			const page = parseInt(req.query.page as string) || 1;
-			const limit = parseInt(req.query.limit as string) || 50;
+			const page = parseInt(req.query.page as string, 10) || 1;
+			const limit = parseInt(req.query.limit as string, 10) || 50;
 
 			const { products, total } = await this.productService.getAllProducts(
 				page,
@@ -125,7 +127,7 @@ export class ProductController {
 	};
 
 	// GET /products/low-stock - Productos con stock bajo
-	getLowStock = async (req: Request, res: Response): Promise<void> => {
+	getLowStock = async (_req: Request, res: Response): Promise<void> => {
 		try {
 			const products = await this.productService.getLowStockProducts();
 			res.status(200).json({
@@ -137,7 +139,7 @@ export class ProductController {
 	};
 
 	// GET /products/out-of-stock - Productos agotados
-	getOutOfStock = async (req: Request, res: Response): Promise<void> => {
+	getOutOfStock = async (_req: Request, res: Response): Promise<void> => {
 		try {
 			const products = await this.productService.getOutOfStockProducts();
 			res.status(200).json({

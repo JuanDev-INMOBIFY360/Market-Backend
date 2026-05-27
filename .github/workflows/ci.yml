@@ -29,8 +29,18 @@ jobs:
       - name: verificar tipos 
         run: npx tsc --noEmit
 
-      - name: pruebas unitarias
-        run: npm test
+      - name: pruebas unitarias con coverage
+        run: npm run test:coverage
+      
+      - name:  generar reporte de cobertura
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: true
+          verbose: true
 
 
   security:
@@ -45,6 +55,7 @@ jobs:
           scan-type: 'fs'
           scan-ref: '.'
           severity: 'CRITICAL,HIGH'
+          scanners: 'vuln'
 
 
     

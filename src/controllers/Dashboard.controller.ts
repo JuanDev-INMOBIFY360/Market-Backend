@@ -1,4 +1,4 @@
-import { Request, type Response } from "express";
+import type { Response } from "express";
 import type { AuthRequest } from "../middlewares/auth.middleware";
 import { DashboardService } from "../services/Dashboard.service";
 
@@ -9,7 +9,7 @@ export class DashboardController {
 		this.dashboardService = new DashboardService();
 	}
 
-	getTodaySales = async (req: AuthRequest, res: Response): Promise<void> => {
+	getTodaySales = async (_req: AuthRequest, res: Response): Promise<void> => {
 		try {
 			const data = await this.dashboardService.getTodaySales();
 			res.status(200).json(data);
@@ -18,7 +18,7 @@ export class DashboardController {
 		}
 	};
 
-	getMonthSales = async (req: AuthRequest, res: Response): Promise<void> => {
+	getMonthSales = async (_req: AuthRequest, res: Response): Promise<void> => {
 		try {
 			const data = await this.dashboardService.getMonthSales();
 			res.status(200).json(data);
@@ -27,7 +27,7 @@ export class DashboardController {
 		}
 	};
 
-	getLowStock = async (req: AuthRequest, res: Response): Promise<void> => {
+	getLowStock = async (_req: AuthRequest, res: Response): Promise<void> => {
 		try {
 			const data = await this.dashboardService.getLowStockCount();
 			res.status(200).json(data);
@@ -36,7 +36,7 @@ export class DashboardController {
 		}
 	};
 
-	getActiveShifts = async (req: AuthRequest, res: Response): Promise<void> => {
+	getActiveShifts = async (_req: AuthRequest, res: Response): Promise<void> => {
 		try {
 			const data = await this.dashboardService.getActiveShifts();
 			res.status(200).json(data);
@@ -45,7 +45,7 @@ export class DashboardController {
 		}
 	};
 
-	getSalesByHour = async (req: AuthRequest, res: Response): Promise<void> => {
+	getSalesByHour = async (_req: AuthRequest, res: Response): Promise<void> => {
 		try {
 			const data = await this.dashboardService.getSalesByHour();
 			res.status(200).json(data);
@@ -55,7 +55,7 @@ export class DashboardController {
 	};
 
 	getPaymentMethods = async (
-		req: AuthRequest,
+		_req: AuthRequest,
 		res: Response,
 	): Promise<void> => {
 		try {
@@ -68,7 +68,7 @@ export class DashboardController {
 
 	getTopProducts = async (req: AuthRequest, res: Response): Promise<void> => {
 		try {
-			const limit = parseInt(req.query.limit as string) || 5;
+			const limit = parseInt(req.query.limit as string, 10) || 5;
 			const data = await this.dashboardService.getTopProductsToday(limit);
 			res.status(200).json(data);
 		} catch (error: any) {

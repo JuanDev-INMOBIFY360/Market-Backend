@@ -1,4 +1,4 @@
-import { Purchase, PurchaseStatus } from "../models/Purchase.model";
+import { Purchase } from "../models/Purchase.model";
 import { PurchaseItem } from "../models/PurchaseItem.model";
 import { ProductsRepository } from "../repositories/Products.repository";
 import { PurchaseRepository } from "../repositories/Purchase.repository";

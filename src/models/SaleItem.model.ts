@@ -44,6 +44,9 @@ export class SaleItem {
 	@Column({ type: "varchar", length: 5, name: "tax_code" })
 	taxCode!: string;
 
+	@Column({ type: "varchar", length: 20, default: "unit" })
+	unit!: string;
+
 	@Column({ type: "decimal", precision: 10, scale: 2, name: "tax_amount" })
 	taxAmount!: number;
 
@@ -59,6 +62,7 @@ export class SaleItem {
 			discount: this.discount,
 			subtotal: this.subtotal,
 			taxCode: this.taxCode,
+			unit: this.unit,
 			taxAmount: this.taxAmount,
 		};
 	}

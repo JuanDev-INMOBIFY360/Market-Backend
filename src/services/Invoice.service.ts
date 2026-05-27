@@ -1,5 +1,5 @@
-import * as fs from "fs";
-import * as path from "path";
+import * as fs from "node:fs";
+import * as path from "node:path";
 import PDFDocument from "pdfkit";
 import { SaleRepository } from "../repositories/Sale.repository";
 import { ConfigService } from "./Config.service";
@@ -34,24 +34,24 @@ export class InvoiceService {
 	}
 
 	private line(char = "-"): string {
-		return char.repeat(this.WIDTH) + "\n";
+		return `${char.repeat(this.WIDTH)}\n`;
 	}
 
 	private center(text: string): string {
 		const pad = Math.max(0, Math.floor((this.WIDTH - text.length) / 2));
-		return " ".repeat(pad) + text + "\n";
+		return `${" ".repeat(pad) + text}\n`;
 	}
 
 	private row(left: string, right: string): string {
 		const space = this.WIDTH - left.length - right.length;
-		return left + " ".repeat(Math.max(1, space)) + right + "\n";
+		return `${left + " ".repeat(Math.max(1, space)) + right}\n`;
 	}
 
 	private formatPrice(price: number, width: number = 8): string {
 		return `$${Math.round(price).toLocaleString("es-CO")}`.padStart(width);
 	}
 	private formatProductName(name: string, maxLen = 20): string {
-		if (name.length > maxLen) return name.substring(0, maxLen - 3) + "...";
+		if (name.length > maxLen) return `${name.substring(0, maxLen - 3)}...`;
 		return name.padEnd(maxLen);
 	}
 
@@ -236,7 +236,7 @@ export class InvoiceService {
 			doc.text(item.quantity.toString(), startX + 30, currentY);
 			doc.text(
 				productName.length > 35
-					? productName.substring(0, 32) + "..."
+					? `${productName.substring(0, 32)}...`
 					: productName,
 				startX + 70,
 				currentY,
