@@ -25,6 +25,7 @@ export class ProductService {
 		minStock?: number,
 		location?: string,
 		taxCode?: string,
+		unit?: string,
 	): Promise<Products> {
 		// Validaciones
 		if (!barcode || barcode.trim() === "") {
@@ -71,7 +72,9 @@ export class ProductService {
 		product.minStock = minStock || 5;
 		product.location = location || "";
 		product.taxCode = taxCode || "A";
+		product.unit = unit || "unit";
 		product.isActive = true;
+		
 
 		return await this.productRepository.save(product);
 	}

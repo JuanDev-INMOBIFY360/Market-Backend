@@ -30,6 +30,7 @@ export class ProductController {
 				minStock,
 				location,
 				taxCode,
+				unit,
 			} = req.body;
 
 			if (!barcode || !name || !salePrice || !purchasePrice) {
@@ -53,6 +54,7 @@ export class ProductController {
 				minStock,
 				location,
 				taxCode,
+				unit,
 			);
 
 			res.status(201).json({

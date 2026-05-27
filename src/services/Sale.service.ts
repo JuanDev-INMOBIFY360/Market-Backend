@@ -63,6 +63,7 @@ export class SaleService {
 			unitPrice: product.salePrice,
 			subtotal: quantity * product.salePrice,
 			taxCode: product.taxCode,
+			unit: product.unit,
 		};
 
 		cart.addItem(item);
@@ -223,6 +224,7 @@ export class SaleService {
 			saleItem.productId = item.productId;
 			saleItem.quantity = item.quantity;
 			saleItem.unitPrice = item.unitPrice;
+			saleItem.unit = item.unit;
 			saleItem.discount = itemDiscount;
 			saleItem.subtotal = itemSubtotalWithDiscount;
 			saleItem.taxCode = product!.taxCode;

@@ -40,7 +40,12 @@ class Server {
 	}
 
 	private middleware(): void {
-		this.app.use(cors());
+		this.app.use(cors({
+			origin: "http://localhost:5173",
+			methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+			allowedHeaders: ["Content-Type", "Authorization"],
+			credentials:true
+		}));
 		this.app.use(express.json());
 		this.app.use(express.urlencoded({ extended: true }));
 	}
